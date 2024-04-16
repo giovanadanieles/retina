@@ -75,7 +75,6 @@ func (h *hnsstats) Init() error {
 	h.endpointQuery.Filter = string(filter)
 
 	h.l.Info("Exiting hnsstats Init...")
-	h.l.Info("We have been here")
 	return nil
 }
 
@@ -85,8 +84,6 @@ func (h *hnsstats) SetupChannel(ch chan *v1.Event) error {
 }
 
 func pullHnsStats(ctx context.Context, h *hnsstats) error {
-	h.l.Info("Entered the function pullHnsStats")
-
 	ticker := time.NewTicker(h.cfg.MetricsInterval)
 	defer ticker.Stop()
 
@@ -96,7 +93,6 @@ func pullHnsStats(ctx context.Context, h *hnsstats) error {
 			h.l.Error("hnsstats plugin canceling", zap.Error(ctx.Err()))
 			return h.Stop()
 		case <-ticker.C:
-			h.l.Info("Entered for-select-case")
 			// Pull data from node
 			// Get local endpoints that are healthy
 			endpoints, err := hcn.ListEndpointsQuery(h.endpointQuery)
@@ -110,11 +106,12 @@ func pullHnsStats(ctx context.Context, h *hnsstats) error {
 			}
 
 			for _, ep := range endpoints {
-				h.l.Info("Entered range-endpoints")
 				if len(ep.IpConfigurations) < 1 {
 					h.l.Info("Skipping endpoint without IPAddress", zap.String(zapEndpointIDField, ep.Id))
 					continue
 				}
+
+				h.l.Debug("Checking...", zap.String("ep Name", ep.Name))
 
 				id := ep.Id
 				mac := ep.MacAddress
