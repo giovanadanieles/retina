@@ -84,10 +84,10 @@ func (h *hnsstats) SetupChannel(ch chan *v1.Event) error {
 }
 
 func pullHnsStats(ctx context.Context, h *hnsstats) error {
+	h.l.Debug("Entered the function pullHnsStats")
+
 	ticker := time.NewTicker(h.cfg.MetricsInterval)
 	defer ticker.Stop()
-
-	h.l.Debug("Entered the function pullHnsStats")
 
 	for {
 		select {
