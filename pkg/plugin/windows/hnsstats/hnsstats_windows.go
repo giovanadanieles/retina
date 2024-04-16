@@ -75,6 +75,7 @@ func (h *hnsstats) Init() error {
 	h.endpointQuery.Filter = string(filter)
 
 	h.l.Info("Exiting hnsstats Init...")
+	h.l.Info("We have been here")
 	return nil
 }
 
