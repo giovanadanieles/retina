@@ -87,6 +87,8 @@ func pullHnsStats(ctx context.Context, h *hnsstats) error {
 	ticker := time.NewTicker(h.cfg.MetricsInterval)
 	defer ticker.Stop()
 
+	h.l.Debug("Entered the function pullHnsStats")
+
 	for {
 		select {
 		case <-ctx.Done():
